@@ -1,11 +1,12 @@
-# Arquivos de ambiente
+
 .env
 
-# Arquivos de cache
+
 __pycache__/
 
-# Arquivos de log
+
 *.log
 
-# Dependências
+
 venv/
+

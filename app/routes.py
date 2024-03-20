@@ -1,39 +1,40 @@
-from flask import render_template, request, redirect, flash
+from flask import render_template, redirect, flash
 from app import app, db
-from app.models import Task
-from datetime import datetime  
+from app.models import Task 
+from app.form import TaskForm
+from datetime import datetime
 
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    tasks = Task.query.all()
+    tasks = Task.query.order_by(Task.due_date).all()
+    form = TaskForm()
 
-    if request.method == "GET":
-        return render_template("index.html", tasks=tasks) 
     
-    elif request.method == "POST":
-        title = request.form["title"]
-        description = request.form["description"]
-        due_date_str = request.form["due_date"]  
-        priority = request.form["priority"]
-        status = request.form["status"]
+    today = datetime.now().date()
+    tasks_due_today = [task for task in tasks if task.due_date.date() == today]
 
-        due_date = datetime.strptime(due_date_str, '%Y-%m-%d')
+    if form.validate_on_submit():
+        title = form.title.data
+        description = form.description.data
+        due_date = form.due_date.data
+        priority = form.priority.data
+        status = form.status.data
 
         task = Task(title=title, description=description, due_date=due_date, priority=priority, status=status)
 
         db.session.add(task)
         db.session.commit()
 
-        flash('Task successfully added.', 'success')  # Mensagem de flash para adição de tarefa
-        return redirect("/")  # Redireciona para a página inicial
+        flash('Task successfully added.', 'success') 
+        return redirect("/") 
 
-    else:
-        flash('Error adding a new task.', 'error')  # Mensagem de flash para erro
-        return redirect("/")
+    return render_template("index.html", tasks=tasks, form=form, tasks_due_today=tasks_due_today)
+
+
     
-
+    
 @app.route("/delete/<int:id>", methods=["POST"])
 def delete(id):
     task = Task.query.get_or_404(id)
@@ -41,8 +42,21 @@ def delete(id):
     db.session.delete(task)
     db.session.commit()
 
-    flash('Task successfully deleted.', 'success')  # Mensagem de flash para exclusão de tarefa
+    flash('Task successfully deleted.', 'success')  
     return redirect("/") 
 
 
 
+@app.route("/update/<int:id>", methods=["GET", "POST"])
+def update(id):
+    task = Task.query.get_or_404(id)
+    form = TaskForm(obj=task)
+
+    if form.validate_on_submit():
+        form.populate_obj(task)
+
+        db.session.commit()
+        flash('Task updated successfully!', 'success')
+        return redirect("/")  
+
+    return render_template("update.html", form=form, task=task)

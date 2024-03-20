@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #343a40; 
+            color: white; 
+            padding-top: 20px;
+        }
+        .container {
+            padding-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #168734;
+            border-color: #881bcc;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3; 
+        }
+        .form-control {
+            background-color: #212529; 
+            color: white; 
+            border-color: #4d4d4d;
+        }
+        .form-control:focus {
+            background-color: #212529; 
+            color: white; 
+            border-color: #80bdff; 
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); 
+        }
+        .alert-danger {
+            background-color: #dc3545; 
+            color: white; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Task</h1>
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.title.label }}<br>
+                {{ form.title(class="form-control") }}
+                {% for error in form.title.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.description.label }}<br>
+                {{ form.description(class="form-control") }}
+                {% for error in form.description.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.due_date.label }}<br>
+                {{ form.due_date(class="form-control") }}
+                {% for error in form.due_date.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.priority.label }}<br>
+                {{ form.priority(class="form-control") }}
+                {% for error in form.priority.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                {{ form.status.label }}<br>
+                {{ form.status(class="form-control") }}
+                {% for error in form.status.errors %}
+                    <span style="color: red;">{{ error }}</span><br>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Update Task</button>
+        </form>
+    </div>
+</body>
+</html>
