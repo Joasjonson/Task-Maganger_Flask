@@ -11,7 +11,7 @@ class Task(db.Model):
     description = db.Column(db.Text, nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
     priority = db.Column(Enum('high', 'medium', 'low', name='priority_enum'), nullable=False)
-    status = db.Column(Enum('pending','in_progress', 'completed', name='status_enum'), nullable=False)  # Corrigido removendo espaço antes de 'in progress'
+    status = db.Column(Enum('pending','in_progress', 'completed', name='status_enum'), nullable=False)  
 
     def __init__(self, title, description, due_date, priority, status ):
         self.title = title
